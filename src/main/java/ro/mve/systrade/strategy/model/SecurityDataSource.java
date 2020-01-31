@@ -1,7 +1,6 @@
 package ro.mve.systrade.strategy.model;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import tech.tablesaw.api.Table;
 

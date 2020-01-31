@@ -2,21 +2,21 @@ package ro.mve.systrade.strategy;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.log4j.Log4j2;
 import ro.mve.systrade.strategy.model.*;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuperBuilder
 @Getter
+@Log4j2
 public class GemStrategy extends TradeStrategy {
 
     @Singular("securityDataSource")
@@ -45,11 +45,6 @@ public class GemStrategy extends TradeStrategy {
     	return stockDs();
 	}
 
-	protected GemStrategy withAlgorithm(@NonNull BiConsumer<? super TradeStrategy,? super RowPair> alg) {
-		this.multipleDataSetsAlgorithm = alg;
-		return this;
-	}
-
 	protected BiConsumer<? super TradeStrategy,? super RowPair> algorithm() {
 		return multipleDataSetsAlgorithm != null? multipleDataSetsAlgorithm : (multipleDataSetsAlgorithm = (t,p) -> {
 			Row stk = p.stock;
@@ -68,17 +63,21 @@ public class GemStrategy extends TradeStrategy {
 
     private void buyShares(Row r, SecurityDataSource ds) {
         LocalDate date = r.getDate(DATE_COLUMN);
-        this.getCashRegister().ensureAvailableCash(date);
+//        this.getCashRegister().ensureAvailableCash(date);
         long sharesNo = getTradeRegister().getSharesNoAtPrice(r.getDouble(PRICE_COLUMN));
-        getTradeRegister().applyCommand(TradeCommand.of(date, TradeCommandType.BUY_SHARES, sharesNo, r.getDouble(PRICE_COLUMN), ds.getSecurityType(), ds.getSecuritySymbol()));
-    }
+        if(sharesNo > 0) {
+			getTradeRegister().applyCommand(TradeCommand.of(date, TradeCommandType.BUY, sharesNo, r.getDouble(PRICE_COLUMN), ds.getSecurityType(), ds.getSecuritySymbol()));
+		} else {
+        	log.debug("Not enough money to buy security {} {}", ds.getSecuritySymbol(), ds.getSecurityType());
+		}
+	}
 
     private void sellShares(Row r, SecurityDataSource ds) {
         TradeRegister tr = this.getTradeRegister();
-        long availableShares = tr.getAvailableShares(ds.getSecurityType());
+        long availableShares = tr.getAvailableShares(ds.getSecuritySymbol());
         if (availableShares > 0) {
             LocalDate date = r.getDate(DATE_COLUMN);
-            tr.applyCommand(TradeCommand.of(date, TradeCommandType.SELL_SHARES, availableShares, r.getDouble(PRICE_COLUMN), ds.getSecurityType(), ds.getSecuritySymbol()));
+            tr.applyCommand(TradeCommand.of(date, TradeCommandType.SELL, availableShares, r.getDouble(PRICE_COLUMN), ds.getSecurityType(), ds.getSecuritySymbol()));
         }
     }
 
@@ -113,7 +112,7 @@ public class GemStrategy extends TradeStrategy {
                 .limit(limit)
                 .map(x -> RowPair.builder().stock(stockData.row(x)).bond(bondData.row(x)).build())
                 .collect(Collectors.toList())
-                .forEach( (t)-> {c.accept(this, t);});
+                .forEach( (t)-> c.accept(this, t));
         return this;
     }
 
@@ -125,8 +124,8 @@ public class GemStrategy extends TradeStrategy {
 
 	public Double getUnrealizedProfit() {
 		if (getTradeRegister().getAllAvailableShares() > 0) {
-			return getSecurityDataSources().stream().map(t -> getTradeRegister().getAvailableShares(t.getSecurityType())
-					* t.getLastSharePrice()).reduce((d1, d2) -> d1 + d2).get();
+			return getSecurityDataSources().stream().map(t -> getTradeRegister().getAvailableShares(t.getSecuritySymbol())
+					* t.getLastSharePrice()).reduce(Double::sum).get();
 		}
 		return 0D;
 	}

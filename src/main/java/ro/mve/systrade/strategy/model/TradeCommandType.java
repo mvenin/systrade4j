@@ -1,13 +1,13 @@
 package ro.mve.systrade.strategy.model;
 
 public enum TradeCommandType {
-	DEPOSIT, REDRAW, BUY_SHARES, SELL_SHARES;
+	DEPOSIT, REDRAW, BUY, SELL;
 
 	public boolean increasesCapital() {
-		return this == DEPOSIT || this == SELL_SHARES;
+		return this == DEPOSIT || this == SELL;
 	}
 
 	public boolean decreasesCapital() {
-		return this == REDRAW || this == BUY_SHARES;
+		return this == REDRAW || this == BUY;
 	}
 }

@@ -1,3 +1,3 @@
 package ro.mve.systrade.strategy.model;
 
-public enum SecurityType {STOCK, BOND};
+public enum SecurityType {STOCK, BOND}

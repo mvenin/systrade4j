@@ -21,14 +21,15 @@ public class TradeRegister {
 		tradeCommands.add(trade);
 	}
 
-	public long getAvailableShares(SecurityType securityType) {
-		Optional<Long> sharesNo = tradeCommands.stream().filter(t-> securityType == null || t.getSecurityType() == securityType)
-				.map(t -> (t.requiresCapital() ? 1 : -1) * t.getSharesNo()).reduce((d1, d2) -> d1 + d2);
+	public long getAvailableShares(String symbol/*SecurityType securityType*/) {
+		Optional<Long> sharesNo = tradeCommands.stream().filter(t-> symbol == null || t.getSecuritySymbol().equalsIgnoreCase(symbol) )
+				.map(t -> (t.requiresCapital() ? 1 : -1) * t.getSharesNo()).reduce(Long::sum);
 		return sharesNo.orElse(0L);
 	}
 
 	public long getSharesNoAtPrice(double sharePrice){
-		return  (long)( this.cashRegister.getAvailableCash() / (sharePrice * (1 + DEF_TAX_PERCENTAGE)));
+		double cash = ((cash = this.cashRegister.getAvailableCash() )<0)? 0 : cash;
+		return  (long)( cash / (sharePrice * (1 + DEF_TAX_PERCENTAGE)));
 	}
 
 	public long getAllAvailableShares() {

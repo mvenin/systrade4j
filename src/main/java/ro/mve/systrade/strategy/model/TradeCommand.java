@@ -5,8 +5,6 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-import static java.lang.String.format;
-
 @Data
 @AllArgsConstructor
 public class TradeCommand {
@@ -18,7 +16,7 @@ public class TradeCommand {
 	private final double sharePrice;
 	private double tradeTaxPrice;
 	private double tradeAmount;
-	private SecurityType securityType = SecurityType.STOCK;
+	private SecurityType securityType;
 	private String securitySymbol;
 
 	public static TradeCommand of(LocalDate opDate, TradeCommandType cmdType, long sharesNo, Double sharePrice,
@@ -39,13 +37,13 @@ public class TradeCommand {
 	}
 
 	@Override public String toString() {
-		return String.format("TradeCommand:" +
-				" tradeDate=" + tradeDate +
-				", commandType=" + commandType +
-				", securityType=" + securityType +
-				", securitySymbol=" + securitySymbol +
+		return String.format("TradeCommand: " +
+				 tradeDate +
+				", " + commandType +
+				" " + securityType +
+				", " + securitySymbol +
 				", sharesNo=" + sharesNo +
 				", sharePrice=" + sharePrice +
-				", tradeAmount= %.2f, tradeTaxPrice= %.2f", tradeAmount, tradeTaxPrice);
+				", amount= %.2f, tax= %.2f", tradeAmount, tradeTaxPrice);
 	}
 }

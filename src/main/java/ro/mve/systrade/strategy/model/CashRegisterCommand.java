@@ -6,8 +6,6 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.Currency;
 
-import static ro.mve.systrade.strategy.model.CashRegister.EUR;
-
 @Data
 @AllArgsConstructor
 public class CashRegisterCommand {

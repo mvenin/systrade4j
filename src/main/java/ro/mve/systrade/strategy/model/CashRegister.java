@@ -22,25 +22,16 @@ public class CashRegister {
 		cashOperations.add(new CashRegisterCommand(opDate, commandType, amount, EUR));
 	}
 
-	public void ensureAvailableCash(LocalDate opDate) {
-		if (this.getAvailableCash() < getMinCashLevel()) {
-			this.applyCommand(opDate, DEPOSIT, getMinCashLevel());
-		}
-	}
-
-	double getMinCashLevel(){
-		return DEF_MIN_CASH_LEVEL;
-	}
-
 	public double getAvailableCash() {
 		Optional<Double> amount = cashOperations.stream().map(t -> (t.getCommandType().increasesCapital() ? 1 : -1)
-				* t.getAmount()).reduce((d1, d2) -> d1 + d2);
+				* t.getAmount()).reduce(Double::sum);
 		return amount.orElse(0D);
 	}
 
 	public double getDepositedCash() {
-		Optional<Double> amount = cashOperations.stream().filter(t -> t.getCommandType()
-				== DEPOSIT).map(t -> t.getAmount()).reduce((d1, d2) -> d1 + d2);
+		Optional<Double> amount = cashOperations.stream().filter(t -> t.getCommandType() == DEPOSIT)
+				.map(CashRegisterCommand::getAmount)
+				.reduce(Double::sum);
 		return amount.orElse(0D);
 	}
 

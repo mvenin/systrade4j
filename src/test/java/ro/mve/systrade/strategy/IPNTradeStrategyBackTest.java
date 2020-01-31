@@ -24,11 +24,13 @@ public class IPNTradeStrategyBackTest {
 
 	@Test
 	public void testBuyAndHoldStrategy() {
-		for(int year = 2019; year >= 2019; year--) {
+		for(int year = 2019; year >= 2000; year--) {
 			SecurityDataSource stockDs = SecurityDataSource.builder().securitySymbol(SP500).dataFile(CSV)
 					.yearStart(year).yearEnd(2020).build();
+
 			BuyAndSellStrategy strategy = BuyAndSellStrategy.builder().securityDataSource(stockDs).daysSamplingWindow(20)
 					.build().execute();
+
 			TradeStrategyReport report = new TradeStrategyReport(strategy);
 			report.setPrintTradeLog(true).print();
 		}
@@ -37,14 +39,12 @@ public class IPNTradeStrategyBackTest {
 	@Test
 	public void testSma() {
 		for( int sma : Arrays.asList(200, 120, 50)) {
-			Map<String, Double> returns = new HashMap<>();
 			for (int year = 2019; year >= 2000; year--) {
 				SecurityDataSource stockDs = SecurityDataSource.builder().securitySymbol(SP500).dataFile(CSV)
 						.yearStart(year).yearEnd(2020).build();
 				BuyAndSellStrategy strategy = BuyAndSellStrategy.builder().securityDataSource(stockDs).daysSamplingWindow(20)
 						.buyRule(TradeRuleSignal.findBy("SMA"+sma)).build().execute();
 				TradeStrategyReport report = new TradeStrategyReport(strategy);
-				returns.put(report.printAverageReturn(), strategy.getAverageReturn());
 			}
 			System.out.println();
 		}

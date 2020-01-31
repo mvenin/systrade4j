@@ -13,7 +13,7 @@ public enum TradeRuleSignal {
 		SMA120((r) -> r.getDouble(PRICE_COLUMN) > r.getDouble("SMA120")),
 		SMA50((r) -> r.getDouble(PRICE_COLUMN) > r.getDouble("SMA50"))
 		;
-		private Predicate<Row> rule;
+		private final Predicate<Row> rule;
 
 		TradeRuleSignal(Predicate<Row> rule) {
 			this.rule = rule;

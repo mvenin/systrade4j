@@ -1,8 +1,6 @@
 package ro.mve.systrade.strategy;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.log4j.Log4j2;
 import ro.mve.systrade.strategy.model.*;
@@ -12,11 +10,10 @@ import tech.tablesaw.api.Table;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ro.mve.systrade.strategy.model.TradeCommandType.BUY_SHARES;
+import static ro.mve.systrade.strategy.model.TradeCommandType.BUY;
 
 @SuperBuilder
 @Data
@@ -42,13 +39,14 @@ public class TradeStrategy {
 	protected <T extends Row> BiConsumer<? super TradeStrategy,? super T> algorithm() {
 		SecurityType securityType = getSecurityDataSource().getSecurityType();
 		String securitySymbol = getSecurityDataSource().getSecuritySymbol();
+
 		return algorithm != null? algorithm : (algorithm = (t, r) -> {
 			LocalDate opDate = r.getDate(DATE_COLUMN);
-			Double sharePrice = r.getDouble(PRICE_COLUMN);
-			getCashRegister().ensureAvailableCash(opDate);
+			double sharePrice = r.getDouble(PRICE_COLUMN);
 			long sharesNo = getTradeRegister().getSharesNoAtPrice(sharePrice);
-			getTradeRegister().applyCommand(new TradeCommand(opDate, BUY_SHARES, sharesNo, sharePrice, securityType, securitySymbol));
+			getTradeRegister().applyCommand(new TradeCommand(opDate, BUY, sharesNo, sharePrice, securityType, securitySymbol));
 		});
+
 	}
 
     public <T extends TradeStrategy> T execute() {
@@ -60,9 +58,9 @@ public class TradeStrategy {
         int limit = size / skip + Math.min(size % skip, 1);
         Stream.iterate(0, i -> i + skip)
                 .limit(limit)
-                .map(x -> data.row(x))
+                .map(data::row)
                 .collect(Collectors.toList())
-				.forEach( (t)-> {c.accept(this, t);});
+				.forEach( (t)-> c.accept(this, t));
         return (T) this;
     }
 
@@ -73,7 +71,7 @@ public class TradeStrategy {
     }
 
     public double getAverageReturn() {
-        long availableShares = tradeRegister.getAvailableShares(getSecurityDataSource().getSecurityType());
+        long availableShares = tradeRegister.getAvailableShares(getSecurityDataSource().getSecuritySymbol());
         double unrealizedProfit = (availableShares > 0) ? availableShares * getSecurityDataSource().getLastSharePrice() : 0D;
         double avgRet;
         if (unrealizedProfit > 0) {
@@ -86,7 +84,7 @@ public class TradeStrategy {
 
 	public Double getUnrealizedProfit() {
 		if (tradeRegister.getAllAvailableShares() > 0) {
-			return tradeRegister.getAvailableShares(getSecurityDataSource().getSecurityType())
+			return tradeRegister.getAvailableShares(getSecurityDataSource().getSecuritySymbol())
 					* getSecurityDataSource().getLastSharePrice();
 		}
 		return 0D;
