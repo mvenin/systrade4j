@@ -1,21 +1,21 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-**/overlays/eu.europa.ec.agri.jcore.jcore-view-static-4.5.5-new-ec-id.info
-
-**/rebel.xml
 # compiled output
-**/node_modules
-**/target
-**/dist
-**/build
-**/xxxxdist
-**/out-tsc
-**/tmp
-**/tests/reports
+/dist
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
+
+# dependencies
+/node_modules
+
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
 
 # IDEs and editors
 /.idea
-**/*.iml
 .project
 .classpath
 .c9/
@@ -29,6 +29,7 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.history/*
 
 # misc
 /.sass-cache
@@ -36,16 +37,10 @@
 /coverage
 /libpeerconnection.log
 npm-debug.log
+yarn-error.log
 testem.log
 /typings
-yarn-error.log
-
-# e2e
-/e2e/*.js
-/e2e/*.map
 
 # System Files
 .DS_Store
 Thumbs.db
-/.metadata
-/.recommenders
