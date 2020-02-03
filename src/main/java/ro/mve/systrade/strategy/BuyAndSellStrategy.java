@@ -1,6 +1,8 @@
 package ro.mve.systrade.strategy;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import ro.mve.systrade.strategy.model.*;
 import tech.tablesaw.api.Row;
@@ -13,6 +15,7 @@ import static ro.mve.systrade.strategy.model.TradeCommandType.SELL;
 
 @SuperBuilder
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BuyAndSellStrategy extends TradeStrategy {
 	private TradeRuleSignal buyRule;
 	private TradeRuleSignal sellRule;

@@ -63,7 +63,6 @@ public class GemStrategy extends TradeStrategy {
 
     private void buyShares(Row r, SecurityDataSource ds) {
         LocalDate date = r.getDate(DATE_COLUMN);
-//        this.getCashRegister().ensureAvailableCash(date);
         long sharesNo = getTradeRegister().getSharesNoAtPrice(r.getDouble(PRICE_COLUMN));
         if(sharesNo > 0) {
 			getTradeRegister().applyCommand(TradeCommand.of(date, TradeCommandType.BUY, sharesNo, r.getDouble(PRICE_COLUMN), ds.getSecurityType(), ds.getSecuritySymbol()));
