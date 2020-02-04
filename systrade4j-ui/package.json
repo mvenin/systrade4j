@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --base-href /systrade4j/",
+    "start-proxy": "ng serve --base-href /systrade4j/ --proxy-config proxy.conf.json --open=true",
     "test": "ng test",
     "lint": "ng lint"
   },

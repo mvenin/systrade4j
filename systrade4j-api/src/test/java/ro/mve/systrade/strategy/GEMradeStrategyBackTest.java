@@ -60,7 +60,7 @@ public class GEMradeStrategyBackTest {
 				Row stk = p.stock;
 				Row bnd = p.bond;
 				Predicate<Row> buyStkRule =  (r) -> r.getDouble(PRICE_COLUMN) > r.getDouble("SMA120");
-				Predicate<Row> buyBndRule =  (r)->(r.getDouble(PRICE_COLUMN) - r.getDouble("SMA120") )/r.getDouble("SMA120")
+				Predicate<Row> buyBndRule =  (r)->(r.getDouble("SMA120") - r.getDouble(PRICE_COLUMN) )/r.getDouble("SMA120")
 						<= 0.2;
 				if ( buyStkRule.test(stk)) {
 					g.sellBonds(bnd);

@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NonNull;
 import ro.mve.systrade.strategy.TradeStrategy;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,25 +39,28 @@ public class TradeStrategyReport {
         return this;
     }
 
-    public TradeStrategyReport print() {
-        tr.getTradeCommands().stream().filter(t -> printTradeLog).forEach(System.out::println);
+    public String print() {
+		ByteArrayOutputStream os=new ByteArrayOutputStream();
+    	PrintStream out = new PrintStream(os);
+
+        tr.getTradeCommands().stream().filter(t -> printTradeLog).forEach(out::println);
 
         String strategyName = this.tradeStrategy.getStrategyDescription();
-        System.out.println(format("\n[%s] Deposited =  %.2f", strategyName, cashRegister.getDepositedCash()));
-        System.out.println(format("[%s] AvailableCash = %.2f", strategyName, cashRegister.getAvailableCash()));
+        out.println(format("\n[%s] Deposited =  %.2f", strategyName, cashRegister.getDepositedCash()));
+        out.println(format("[%s] AvailableCash = %.2f", strategyName, cashRegister.getAvailableCash()));
         dataSources.forEach(
                 ds -> {
                     long bought = tr.getTradeCommands().stream().filter(t -> t.getCommandType() == TradeCommandType.BUY && t.getSecurityType() == ds.getSecurityType()).count();
                     long sold = tr.getTradeCommands().stream().filter(t -> t.getCommandType() == TradeCommandType.SELL && t.getSecurityType() == ds.getSecurityType()).count();
-                    System.out.println(format("[%s] AvailableShares = %s (%s) bought %d time(s), sold %d time(s), lastSharePrice= %.2f at date = %s",
+                    out.println(format("[%s] AvailableShares = %s (%s) bought %d time(s), sold %d time(s), lastSharePrice= %.2f at date = %s",
                             strategyName, tr.getAvailableShares(ds.getSecuritySymbol()), ds.getSecuritySymbol(), bought, sold, ds.getLastSharePrice(), ds.getLastShareDate()))
                     ;
                 }
         );
 
-        System.out.println(format("[%s] UnRealized Profit = %.2f", strategyName, tradeStrategy.getUnrealizedProfit()));
-        System.out.println(format("[%s] Average Return = %.2f%%", strategyName, tradeStrategy.getAverageReturn()));
-        return this;
+        out.println(format("[%s] UnRealized Profit = %.2f", strategyName, tradeStrategy.getUnrealizedProfit()));
+        out.println(format("[%s] Average Return = %.2f%%", strategyName, tradeStrategy.getAverageReturn()));
+        return os.toString();
     }
 
     public String printAverageReturn() {
