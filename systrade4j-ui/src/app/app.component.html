@@ -2,58 +2,7 @@
 <router-outlet></router-outlet>
 <hr>
 
-<form>
-<table><tbody>
-<tr>
-  <td><label for="budgetId">Budget</label></td>
-  <td><input id="budgetId"  [(ngModel)]="task.budget" name='budget' size="13"/></td>
-</tr>
-<tr>
-  <td><label for="yearStart">Start Year</label></td>
-  <td><input id="yearStart" [(ngModel)]="task.yearStart" name='yearStart' size="13"/></td>
-</tr>
-<tr>
-  <td><label for="yearEnd">End Year</label></td>
-  <td><input id="yearEnd" [(ngModel)]="task.yearEnd" name='yearEnd' size="13"/></td>
-</tr>
-<tr>
-  <td><label for="stockCbx">Stock</label></td>
-  <td><select id="stockCbx" [(ngModel)]="task.stock"  name='stock'>
-    <option *ngFor="let s of ref_stocks" [value]="s"> {{s}}  </option>
-  </select></td>
-</tr>
-<tr>
-  <td><label for="bondCbx">Bond</label></td>
-  <td><select id="bondCbx" [(ngModel)]="task.bond" name='bond'>
-    <option *ngFor="let s of ref_bonds" [value]="s"> {{s}}  </option>
-  </select></td>
-</tr>
-</tbody></table>
-
-<p>
-<div><li> Buy stocks when price is greater than
-  <select id="smaCbx" [(ngModel)]="task.buyStockRule"  name='buyStockRule'>
-  <option value="SMA120">SMA50</option>
-  <option value="SMA120">SMA120</option>
-  <option value="SMA120">SMA200</option>
-</select></li></div>
-
-<div><li>Sell stocks when price drops with more than
-<select [(ngModel)]="task.sellStockRule"  name='sellStockRule'>
-  <option value="10">10%</option>
-  <option value="15">15%</option>
-  <option value="20">20%</option>
-</select></li></div>
-
-<div><li>Buy bonds when <span>Sell stocks</span></li></div>
-<div><li>Sell bonds when <span>Buy stocks</span></li></div>
-
-<li><label for="balanceRule">Maintain  balance 80% stocks 20% bonds</label> <input type="checkbox" id="balanceRule"></li>
-<p>
-<button type="submit" (click)="runStrategy()">Run Strategy</button>
-</form>
-
-<hr>
-<ol><li *ngFor="let ln of strategyResults">{{ln}} </li></ol>
-
-
+<div class="sections">
+  <strategy></strategy>
+  <strategy></strategy>
+</div>

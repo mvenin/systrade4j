@@ -6,3 +6,18 @@ button {
   background-color: lightcoral;
   border-radius: 15px;
 }
+
+section {
+  background-color: seashell;
+  border-radius: 5px;
+  float: left;
+  max-width: 600px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  box-shadow: 0 0 0 10px white inset;
+}
+
+div.separator {
+  background-color: white;
+  min-width: 2px;
+}

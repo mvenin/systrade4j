@@ -3,13 +3,11 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {StrategyTask} from "./strategy.model";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
+  selector: 'strategy',
+  templateUrl: './strategy.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'systrade4j';
-
+export class StrategyComponent {
   task: StrategyTask = new StrategyTask();
   strategyResults: string[];
 
@@ -32,4 +30,5 @@ export class AppComponent {
       .subscribe((data: any)=>{ this.strategyResults = data.results.split(/\r?\n/);})
      ;
   }
+
 }

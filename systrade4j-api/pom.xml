@@ -123,17 +123,14 @@
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
                         <phase>validate</phase>
                         <goals><goal>copy-resources</goal></goals>
                         <configuration>
-                            <outputDirectory>${build.directory}/classes/static/</outputDirectory>
-                            <!--
-                            <outputDirectory>${basedir}/src/main/resources/META-INF/resources</outputDirectory>
-                            <outputDirectory>${build.directory}/classes/META-INF/resources</outputDirectory>
-                            -->
+                            <outputDirectory>${project.build.directory}/classes/static/</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${basedir}/../systrade4j-ui/dist</directory>

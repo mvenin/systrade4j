@@ -31,9 +31,9 @@ public class StrategyRest {
 
 	@PostMapping(value = "/api/strategy-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseEntity<StrategyResult> runStrategy(@RequestBody StrategyTask task) {
-		System.out.println(task);
+		log.info(task);
 		TradeStrategyReport report = StrategyExecutor.runTask(task);
-		String results = report.setPrintTradeLog(false).print();
+		String results = report.setPrintTradeLog(task.isShowTransactions()).print();
 		return ResponseEntity.ok(StrategyResult.of(results));
 	}
 

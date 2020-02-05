@@ -37,7 +37,7 @@ public class TradeCommand {
 	}
 
 	@Override public String toString() {
-		return String.format("TradeCommand: " +
+		return String.format("Trade: " +
 				 tradeDate +
 				", " + commandType +
 				" " + securityType +

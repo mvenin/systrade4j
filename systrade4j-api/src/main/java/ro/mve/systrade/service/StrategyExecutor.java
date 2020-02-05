@@ -23,14 +23,15 @@ import static ro.mve.systrade.strategy.model.SecurityType.STOCK;
 public class StrategyExecutor {
 
 	public static TradeStrategyReport runTask(StrategyTask task) {
-		final String CSV = "IPN".equalsIgnoreCase(task.getStock()) ? "/data/IPN.csv" : "/data/IVV.csv" ;
-		final String BOND_CSV = "/data/AGG.csv";
+		final String stockCsvpath = String.format("/data/%s.csv",task.getStock());
+		final String bondCsvPath = String.format("/data/%s.csv",task.getBond());
+
 		final SecurityDataSource stockDs = SecurityDataSource.builder().securityType(STOCK).securitySymbol(task.getStock())
-				.dataFile(CSV)
+				.dataFile(stockCsvpath)
 				.yearStart(task.getYearStart()).yearEnd(task.getYearEnd()).build();
 
 		final SecurityDataSource bondDs = SecurityDataSource.builder().securityType(SecurityType.BOND).securitySymbol(task.getBond())
-				.dataFile(BOND_CSV)
+				.dataFile(bondCsvPath)
 				.yearStart(task.getYearStart()).yearEnd(task.getYearEnd()).build();
 		final String sma = task.getBuyStockRule();
 
@@ -52,7 +53,7 @@ public class StrategyExecutor {
 
 		GemStrategy gemStrategy = GemStrategy.builder().securityDataSource(stockDs).securityDataSource(bondDs).daysSamplingWindow(20)
 				.multipleDataSetsAlgorithm(alg).build();
-		gemStrategy.getCashRegister().applyCommand(LocalDate.now(), TradeCommandType.DEPOSIT, 10_000);
+		gemStrategy.getCashRegister().applyCommand(LocalDate.now(), TradeCommandType.DEPOSIT, task.getBudget());
 		gemStrategy.execute();
 
 		TradeStrategyReport report = new TradeStrategyReport(gemStrategy, gemStrategy.getSecurityDataSources());

@@ -4,14 +4,15 @@ import lombok.Data;
 
 @Data
 public class StrategyTask {
-	double budget;
-	int yearStart;
-	int yearEnd;
-	String stock;
-	String bond;
-	String buyStockRule;
-	String sellStockRule;
-	String buyBondsRule;
-	String sellBondsRule;
-	boolean balanceRule;
+	private double budget;
+	private int yearStart;
+	private int yearEnd;
+	private String stock;
+	private String bond;
+	private String buyStockRule;
+	private String sellStockRule;
+	private String buyBondsRule;
+	private String sellBondsRule;
+	private boolean balanceRule;
+	private boolean showTransactions;
 }

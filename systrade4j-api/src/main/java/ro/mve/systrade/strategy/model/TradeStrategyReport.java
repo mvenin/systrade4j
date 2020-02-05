@@ -45,26 +45,26 @@ public class TradeStrategyReport {
 
         tr.getTradeCommands().stream().filter(t -> printTradeLog).forEach(out::println);
 
-        String strategyName = this.tradeStrategy.getStrategyDescription();
-        out.println(format("\n[%s] Deposited =  %.2f", strategyName, cashRegister.getDepositedCash()));
-        out.println(format("[%s] AvailableCash = %.2f", strategyName, cashRegister.getAvailableCash()));
+        out.println();
+        out.println(format("Deposited Cash =  %.2f", cashRegister.getDepositedCash()));
+        out.println(format("Available Cash = %.2f", cashRegister.getAvailableCash()));
         dataSources.forEach(
                 ds -> {
                     long bought = tr.getTradeCommands().stream().filter(t -> t.getCommandType() == TradeCommandType.BUY && t.getSecurityType() == ds.getSecurityType()).count();
                     long sold = tr.getTradeCommands().stream().filter(t -> t.getCommandType() == TradeCommandType.SELL && t.getSecurityType() == ds.getSecurityType()).count();
-                    out.println(format("[%s] AvailableShares = %s (%s) bought %d time(s), sold %d time(s), lastSharePrice= %.2f at date = %s",
-                            strategyName, tr.getAvailableShares(ds.getSecuritySymbol()), ds.getSecuritySymbol(), bought, sold, ds.getLastSharePrice(), ds.getLastShareDate()))
+                    out.println(format("AvailableShares = %s (%s) bought %d time(s), sold %d time(s), lastSharePrice= %.2f at date = %s",
+                            tr.getAvailableShares(ds.getSecuritySymbol()), ds.getSecuritySymbol(), bought, sold, ds.getLastSharePrice(), ds.getLastShareDate()))
                     ;
                 }
         );
 
-        out.println(format("[%s] UnRealized Profit = %.2f", strategyName, tradeStrategy.getUnrealizedProfit()));
-        out.println(format("[%s] Average Return = %.2f%%", strategyName, tradeStrategy.getAverageReturn()));
+        out.println(format("Unrealized Profit = %.2f", tradeStrategy.getUnrealizedProfit()));
+        out.println(format("Average Return = %.2f%%", tradeStrategy.getAverageReturn()));
         return os.toString();
     }
 
     public String printAverageReturn() {
-        String s = format("[%s] Average Return = %.2f%%", this.strategyName, tradeStrategy.getAverageReturn());
+        String s = format("Average Return = %.2f%%", tradeStrategy.getAverageReturn());
         System.out.println(s);
         return s;
     }

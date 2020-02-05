@@ -5,10 +5,11 @@ import {HttpClientModule} from '@angular/common/http';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {StrategyComponent} from "./strategy.component";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,StrategyComponent
   ],
   imports: [
     BrowserModule, AppRoutingModule, FormsModule, HttpClientModule
@@ -17,18 +18,4 @@ import {AppComponent} from './app.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-}
-
-
-export class StrategyTask {
-  budget: number;
-  yearStart: number;
-  yearEnd: number;
-  stock: string;
-  bond: string;
-  buyStockRule: string;
-  sellStockRule: string;
-  buyBondsRule: string;
-  sellBondsRule: string;
-  balanceRule: boolean;
 }
