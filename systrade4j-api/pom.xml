@@ -106,7 +106,7 @@
     </dependencies>
 
     <build>
-        <finalName>systrade4j-${project.version}</finalName>
+        <finalName>systrade4j.jar</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -140,8 +140,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -160,6 +158,21 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <to>
+                        <image>mariancr.azurecr.io/hello-world:v1</image>
+                        <auth>
+                            <username>marianCR</username>
+                            <password>Rz1hVwt1eovylx5dtMzM3cH0+0sz4hxN</password>
+                        </auth>
+                    </to>
+                </configuration>
             </plugin>
 
         </plugins>
